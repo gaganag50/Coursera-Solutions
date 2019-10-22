@@ -1,29 +1,31 @@
-#include <iostream>
-#include <vector>
-#include <string>
+#include <bits/stdc++.h>
 
-using std::cin;
-using std::cout;
-using std::endl;
-using std::vector;
-using std::string;
+using namespace std;
 
 int main() {
-    string s;
-    cin >> s;
+    string str;
+    cin >> str;
     int q;
     cin >> q;
-    vector<int> l(q), r(q);
-    for (int i = 0; i < q; ++i)
-        cin >> l[i] >> r[i];
-
-    vector<char> result(q);
-
-    // your code
-
-    for (int i = 0; i < result.size(); ++i) {
-        cout << result[i] << endl;
+    vector<int> freq[26];
+    int idx = 0;
+    for (char it:str) {
+        freq[it - 'a'].push_back(idx);
+        ++idx;
     }
-
-    return 0;
+    for (int i = 0; i < q; ++i) {
+        int l, r;
+        cin >> l >> r;
+        long M = 0;
+        char ans;
+        for (int a = 0; a < 26; ++a) {
+            auto low = lower_bound(freq[a].begin(), freq[a].end(), l - 1);
+            auto high = upper_bound(freq[a].begin(), freq[a].end(), r - 1);
+            if (M < high - low) {
+                M = high - low;
+                ans = char('a' + a);
+            }
+        }
+        printf("%c\n",ans);
+    }
 }
