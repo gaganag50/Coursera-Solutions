@@ -4,42 +4,50 @@ using namespace std;
 typedef long long int ll;
 
 ll sumOfDigits(int S, int L) {
-    vector<vector<ll>> dp(static_cast<unsigned long>(S + 1), vector<ll>(static_cast<unsigned long>(L + 1)));
-    for (int i = 0; i <= S; ++i)
-        fill(dp[i].begin(), dp[i].end(), 0L);
+    vector<vector<ll>> dp(static_cast<unsigned long>(L), vector<ll>(static_cast<unsigned long>(S + 1)));
 
 
-    for (int r = 0; r <= S; ++r) {
-        for (int c = 0; c <= L; ++c) {
-            if (c == 0)dp[r][c] = 0;
-            else if (r == 0)dp[r][c] = 1;
-            else if (c == 1 && r >= 0 && r <= 9) {
-                dp[r][c] = 1;
-            } else {
-                if (c == L) {
-                    for (int i = 1; r - i >= 0 && i <= min(9, r); ++i) {
+    for (int len = 0; len < L; ++len)
+        fill(dp[len].begin(), dp[len].end(), 0L);
+
+    for (int len = 0; len < L-1; ++len) {
+        dp[len][0] = 1;
+    }
+
+    for (int sum = 1; sum <= min(9, S); ++sum) {
+        dp[0][sum] = 1;       // 1 length
+    }
+
+    for (int len = 1; len < L; ++len) {     // length->2 to L
+        for (int sum = 1; sum <= S; ++sum) {
 
 
-                        dp[r][c] += dp[r - i][c - 1];
-                    }
-                } else
-                    for (int i = 0; r - i >= 0 && i <= min(9, r); ++i) {
+            if (len == L - 1) {
+                for (int digit = 1; sum >= digit && digit <= 9; ++digit) {
 
 
-                        dp[r][c] += dp[r - i][c - 1];
-                    }
-            }
+                    dp[len][sum] += dp[len - 1][sum - digit];
+                }
+            } else
+                for (int digit = 0; sum >= digit  && digit <= 9; ++digit) {
+
+
+                    dp[len][sum] += dp[len - 1][sum - digit];
+                }
+
         }
     }
 
-
-    return dp[S][L];
+    return dp[L - 1][S];
 }
 
 int main() {
     int S, L;
     cin >> S >> L;
-    if (S == 0)cout << 0;
+    if (L == 0)cout << 0;
+    else if(S == 0 && L == 1)cout << 1;
+    else if(S == 0 )cout << 0;
+
     else
         cout << sumOfDigits(S, L);
 }
