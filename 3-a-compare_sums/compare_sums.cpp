@@ -27,7 +27,7 @@ int main() {
     else if (sum_a_larger)
         cout << "SUM(A)>SUM(B)" << endl;
     else
-        cout << "SUM(A)<SUM(B)" << endl;
+        cout << "SUM(A)<SUM(B)" << enl;
 
     return 0;
 }
